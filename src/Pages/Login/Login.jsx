@@ -54,7 +54,7 @@ const Login = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.acknowledged) {
-          toast.success("successfully created a user");
+          toast.success("successfully Login ");
           setLoginUserEmail(email);
         } else {
           setError(data.message);
