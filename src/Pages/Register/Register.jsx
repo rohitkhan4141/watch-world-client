@@ -6,7 +6,8 @@ import { AuthContext } from "../../Contexts/AuthContext/AuthContext";
 import useToken from "../../Hooks/useToken";
 
 const Register = () => {
-  const { createUser, setLoading, updateUser } = useContext(AuthContext);
+  const { createUser, setLoading, updateUser, googleAuth } =
+    useContext(AuthContext);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -24,24 +25,27 @@ const Register = () => {
   // form submit handler
   const onFormSubmit = (data) => {
     setError("");
-    createUser(data.email, data.password).then(() => {
-      // error er kajta pore kortesi
-      // setError(err)
-      updateUser({ displayName: data.name })
-        .then(() => {
-          saveUser(data.name, data.email);
-        })
-        .catch((err) => console.log(err));
-    });
+    createUser(data.email, data.password)
+      .then(() => {
+        updateUser({ displayName: data.name })
+          .then(() => {
+            saveUser(data.name, data.email, data.role);
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
   };
   // save user to our database
-  const saveUser = (name, email) => {
+  const saveUser = (name, email, role) => {
     const user = {
       name,
       email,
+      role,
     };
     fetch("http://localhost:5000/users", {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -52,10 +56,24 @@ const Register = () => {
         if (data.acknowledged) {
           toast.success("successfully created a user");
           setCreatedUserEmail(email);
+        } else {
+          setError(data.message);
         }
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+
+  const googleLogIn = () => {
+    setError("");
+    googleAuth()
+      .then((user) => {
+        saveUser(user?.user?.displayName, user?.user?.email, "buyer");
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
       });
   };
 
@@ -75,7 +93,7 @@ const Register = () => {
               {...register("name", { required: true })}
               type='text'
               placeholder='name'
-              className='input input-bordered w-full'
+              className='input input-bordered w-full input-accent'
             />
             {errors.name && (
               <span className='text-red-400 my-2'>
@@ -91,7 +109,7 @@ const Register = () => {
               {...register("email", { required: true })}
               type='email'
               placeholder='email'
-              className='input input-bordered w-full text-gray'
+              className='input input-bordered input-accent w-full text-gray'
             />
             {errors.email && (
               <span className='text-red-400 my-2'>
@@ -113,12 +131,29 @@ const Register = () => {
               })}
               type='password'
               placeholder='password'
-              className='input input-bordered w-full'
+              className='input input-bordered w-full input-accent'
             />
             {errors.password && (
               <span className='text-red-400 my-2'>
                 {errors.password?.message}
               </span>
+            )}
+          </div>
+          <div className='form-control w-full'>
+            <label className='label'>
+              <span className='label-text'>Select Role</span>
+            </label>
+            <select
+              className='select select-accent'
+              {...register("role", { required: true })}
+            >
+              <option defaultValue='buyer' value='buyer'>
+                Buyer
+              </option>
+              <option value='seller'>Seller</option>
+            </select>
+            {errors.role && (
+              <span className='text-red-400 my-2'>{errors.role?.message}</span>
             )}
           </div>
           <span className='text-rose-400 '>
@@ -130,13 +165,21 @@ const Register = () => {
               Login
             </Link>
           </span>
-          <input type='submit' className='btn btn-accent w-full mt-5' />
+          <input
+            type='submit'
+            value='Register'
+            className='btn btn-accent w-full mt-5'
+          />
         </form>
       </div>
+      <p className='text-center text-red-800'>{error}</p>
       <div className='w-full lg:w-1/3 mx-auto'>
         <div className='divider'>OR</div>
         <div className=''>
-          <button className='btn btn-outline btn-accent w-full my-4'>
+          <button
+            onClick={googleLogIn}
+            className='btn btn-outline btn-accent w-full my-4'
+          >
             Continue With Google
           </button>
         </div>

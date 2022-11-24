@@ -10,6 +10,8 @@ const useToken = (email) => {
           if (data.accessToken) {
             localStorage.setItem("token", data.accessToken);
             setToken(data.accessToken);
+          } else {
+            setTokenError("Please SignUp from Register Page Then Login!!");
           }
         });
     }

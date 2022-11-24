@@ -6,7 +6,8 @@ import { AuthContext } from "../../Contexts/AuthContext/AuthContext";
 import useToken from "../../Hooks/useToken";
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
+  const { login, googleAuth, setLoading } = useContext(AuthContext);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -16,19 +17,66 @@ const Login = () => {
   if (token) {
     navigate(from, { replace: true });
   }
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const onFormSubmit = (data) => {
-    login(data.email, data.password).then((userCredential) => {
-      if (userCredential.user) {
-        toast.success("login Successfully");
-        setLoginUserEmail(data.email);
-      }
-    });
+    setError("");
+    login(data.email, data.password)
+      .then((userCredential) => {
+        if (userCredential.user) {
+          toast.success("login Successfully");
+          setLoginUserEmail(data.email);
+        }
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
   };
+
+  const saveUser = (name, email, role) => {
+    const user = {
+      name,
+      email,
+      role,
+    };
+    fetch("http://localhost:5000/users", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.acknowledged) {
+          toast.success("successfully created a user");
+          setLoginUserEmail(email);
+        } else {
+          setError(data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const googleLogIn = () => {
+    setError("");
+    googleAuth()
+      .then((user) => {
+        saveUser(user?.user?.displayName, user?.user?.email, "buyer");
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
+  };
+
   return (
     <>
       <h1 className='text-4xl text-center font-bold mt-16 mb-8'>Login</h1>
@@ -45,7 +93,7 @@ const Login = () => {
               {...register("email", { required: true })}
               type='email'
               placeholder='email'
-              className='input input-bordered w-full text-gray'
+              className='input input-bordered w-full text-gray input-accent'
             />
             {errors.email && (
               <span className='text-red-400 my-2'>
@@ -67,7 +115,7 @@ const Login = () => {
               })}
               type='password'
               placeholder='password'
-              className='input input-bordered w-full'
+              className='input input-bordered w-full input-accent'
             />
             {errors.password && (
               <span className='text-red-400 my-2'>
@@ -87,10 +135,14 @@ const Login = () => {
           <input type='submit' className='btn btn-accent w-full mt-5' />
         </form>
       </div>
+      <p className='text-center text-rose-700 my-1'>{error}</p>
       <div className='w-full lg:w-1/3 mx-auto'>
         <div className='divider'>OR</div>
         <div className=''>
-          <button className='btn btn-outline btn-accent w-full my-4'>
+          <button
+            onClick={googleLogIn}
+            className='btn btn-outline btn-accent w-full my-4'
+          >
             Continue With Google
           </button>
         </div>
