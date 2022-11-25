@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./SingleCategorie.css";
 
 const SIngleCategory = ({ singleCategory }) => {
@@ -12,7 +13,12 @@ const SIngleCategory = ({ singleCategory }) => {
           {singleCategory?.categorieName}
         </h2>
         <div className='card-actions justify-center my-2'>
-          <button className='btn btn-accent'>Explore</button>
+          <Link
+            to={`/categories/${singleCategory?.categorieName}`}
+            className='btn btn-accent'
+          >
+            Explore
+          </Link>
         </div>
       </div>
     </div>

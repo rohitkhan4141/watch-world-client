@@ -3,19 +3,12 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Contexts/AuthContext/AuthContext";
-import useToken from "../../Hooks/useToken";
 
 const Register = () => {
   const { createUser, setLoading, updateUser, googleAuth } =
     useContext(AuthContext);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
-  const [createdUserEmail, setCreatedUserEmail] = useState("");
-  const [token] = useToken(createdUserEmail);
-  if (token) {
-    navigate("/");
-  }
   const {
     register,
     handleSubmit,
@@ -29,7 +22,8 @@ const Register = () => {
       .then(() => {
         updateUser({ displayName: data.name })
           .then(() => {
-            saveUser(data.name, data.email, data.role);
+            setLoading(false);
+            saveUser(data?.name, data?.email, data?.role);
           })
           .catch((err) => console.log(err));
       })
@@ -55,9 +49,8 @@ const Register = () => {
       .then((data) => {
         if (data.acknowledged) {
           toast.success("successfully created a user");
-          setCreatedUserEmail(email);
-        } else {
-          setError(data.message);
+          getUserToken(email);
+          // setCreatedUserEmail(email);
         }
       })
       .catch((err) => {
@@ -70,10 +63,20 @@ const Register = () => {
     googleAuth()
       .then((user) => {
         saveUser(user?.user?.displayName, user?.user?.email, "buyer");
-        setLoading(false);
       })
       .catch((err) => {
         setError(err.message);
+      });
+  };
+
+  const getUserToken = (email) => {
+    fetch(`http://localhost:5000/jwt?email=${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.accessToken) {
+          localStorage.setItem("token", data.accessToken);
+          navigate("/");
+        }
       });
   };
 

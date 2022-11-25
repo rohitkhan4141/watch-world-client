@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Contexts/AuthContext/AuthContext";
-import useToken from "../../Hooks/useToken";
 
 const Login = () => {
   const { login, googleAuth, setLoading } = useContext(AuthContext);
@@ -11,13 +10,6 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  const [loginUserEmail, setLoginUserEmail] = useState("");
-  const [token] = useToken(loginUserEmail);
-
-  if (token) {
-    navigate(from, { replace: true });
-  }
-
   const {
     register,
     handleSubmit,
@@ -30,7 +22,7 @@ const Login = () => {
       .then((userCredential) => {
         if (userCredential.user) {
           toast.success("login Successfully");
-          setLoginUserEmail(data.email);
+          getUserToken(data.email);
         }
       })
       .catch((err) => {
@@ -55,7 +47,7 @@ const Login = () => {
       .then((data) => {
         if (data.acknowledged) {
           toast.success("successfully Login ");
-          setLoginUserEmail(email);
+          getUserToken(email);
         } else {
           setError(data.message);
         }
@@ -69,11 +61,24 @@ const Login = () => {
     setError("");
     googleAuth()
       .then((user) => {
-        saveUser(user?.user?.displayName, user?.user?.email, "buyer");
-        setLoading(false);
+        if (user?.user?.uid) {
+          saveUser(user?.user?.displayName, user?.user?.email, "buyer");
+          setLoading(false);
+        }
       })
       .catch((err) => {
         setError(err.message);
+      });
+  };
+
+  const getUserToken = (email) => {
+    fetch(`http://localhost:5000/jwt?email=${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.accessToken) {
+          localStorage.setItem("token", data.accessToken);
+          navigate(from, { replace: true });
+        }
       });
   };
 
