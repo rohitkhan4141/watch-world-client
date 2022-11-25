@@ -2,7 +2,13 @@ import { createBrowserRouter } from "react-router-dom";
 import DashBoardLayout from "../Layout/DashBoardLayout";
 import Main from "../Layout/Main";
 import Blog from "../Pages/Blog/Blog";
+import AllBuyers from "../Pages/Dashboard/AdminDashboard/AllBuyers";
+import AllSellers from "../Pages/Dashboard/AdminDashboard/AllSellers";
+import RepotedItems from "../Pages/Dashboard/AdminDashboard/RepotedItems";
+import MyOrders from "../Pages/Dashboard/BuyerDashboard/MyOrders";
 import Dashboard from "../Pages/Dashboard/DashBoard/Dashboard";
+import AddProduct from "../Pages/Dashboard/SellerDashBoard/AddProduct";
+import MyProducts from "../Pages/Dashboard/SellerDashBoard/MyProducts";
 import DisplayWatches from "../Pages/DisplayWatches/DisplayWatches";
 import Home from "../Pages/Home/Home/Home.jsx";
 import Login from "../Pages/Login/Login";
@@ -49,6 +55,30 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "/dashboard/buyer/myorders",
+        element: <MyOrders />,
+      },
+      {
+        path: "/dashboard/seller/addproduct",
+        element: <AddProduct />,
+      },
+      {
+        path: "/dashboard/seller/myproduct",
+        element: <MyProducts />,
+      },
+      {
+        path: "/dashboard/admin/allbuyers",
+        element: <AllBuyers />,
+      },
+      {
+        path: "/dashboard/admin/allsellers",
+        element: <AllSellers />,
+      },
+      {
+        path: "/dashboard/admin/repoteditems",
+        element: <RepotedItems />,
       },
     ],
   },

@@ -9,6 +9,7 @@ const BookingModal = ({ bookingWatches, setBookingWatches }) => {
     const from = event.target;
     const myName = from.name.value;
     const watchName = bookingWatches?.name;
+    const watchPicture = bookingWatches?.picture;
     const email = from.email.value;
     const price = from.price.value;
     const phone = from.phone.value;
@@ -20,6 +21,7 @@ const BookingModal = ({ bookingWatches, setBookingWatches }) => {
       phone,
       price,
       location,
+      watchPicture,
     };
 
     fetch("http://localhost:5000/mybookings", {
