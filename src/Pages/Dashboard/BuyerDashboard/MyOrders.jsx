@@ -1,11 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../../../Contexts/AuthContext/AuthContext";
 
 const MyOrders = () => {
+  const { user } = useContext(AuthContext);
   const { data: orders = [] } = useQuery({
     queryKey: ["myOrders"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/myOrders");
+      const res = await fetch(
+        `http://localhost:5000/mybookings?email=${user.email}`
+      );
       const data = await res.json();
       return data;
     },
@@ -15,9 +19,9 @@ const MyOrders = () => {
       <table className='table w-full'>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
+            <th>Image</th>
+            <th>Watch Name</th>
+            <th>Price</th>
             <th></th>
           </tr>
         </thead>
@@ -27,23 +31,20 @@ const MyOrders = () => {
               <td>
                 <div className='flex items-center space-x-3'>
                   <div className='avatar'>
-                    <div className='mask mask-squircle w-12 h-12'>
+                    <div className='mask mask-square w-28 h-28'>
                       <img
                         src={order?.watchPicture}
                         alt='Avatar Tailwind CSS Component'
+                        className='rounded-lg'
                       />
                     </div>
                   </div>
-                  {/* <div>
-                      <div className='font-bold'>Hart Hagerty</div>
-                      <div className='text-sm opacity-50'>United States</div>
-                    </div> */}
                 </div>
               </td>
               <td>{order?.watchName}</td>
               <td>{`$ ${order?.price}`}</td>
               <th>
-                <button className='btn btn-ghost btn-xs'>details</button>
+                <button className='btn btn-primary btn-xs'>pay</button>
               </th>
             </tr>
           ))}
