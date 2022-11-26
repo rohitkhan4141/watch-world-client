@@ -3,10 +3,12 @@ import { Link, Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import { AuthContext } from "../Contexts/AuthContext/AuthContext";
 import useAdmin from "../Hooks/useAdmin";
+import useSeller from "../Hooks/useSeller";
 
 const DashBoardLayout = () => {
   const { user } = useContext(AuthContext);
   const [isAdmin] = useAdmin(user?.email);
+  const [isSeller] = useSeller(user?.email);
   return (
     <div>
       <Navbar />
@@ -22,15 +24,22 @@ const DashBoardLayout = () => {
         <div className='drawer-side'>
           <label htmlFor='dashboard-drawer' className='drawer-overlay'></label>
           <ul className='menu p-4 w-80 bg-base-100 text-base-content'>
-            <li>
-              <Link to='/dashboard/buyer/myorders'>My Orders</Link>
-            </li>
-            <li>
-              <Link to='/dashboard/seller/addproduct'>Add Products</Link>
-            </li>
-            <li>
-              <Link to='/dashboard/seller/myproduct'>My Products</Link>
-            </li>
+            {!isSeller && !isAdmin && (
+              <li>
+                <Link to='/dashboard/buyer/myorders'>My Orders</Link>
+              </li>
+            )}
+            {isSeller && (
+              <>
+                <li>
+                  <Link to='/dashboard/seller/addproduct'>Add Products</Link>
+                </li>
+                <li>
+                  <Link to='/dashboard/seller/myproduct'>My Products</Link>
+                </li>
+              </>
+            )}
+
             {isAdmin && (
               <>
                 <li>
