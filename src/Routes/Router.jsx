@@ -14,6 +14,7 @@ import DisplayWatches from "../Pages/DisplayWatches/DisplayWatches";
 import Home from "../Pages/Home/Home/Home.jsx";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
+import AdminRoute from "./AdminRoute";
 import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
@@ -41,7 +42,11 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: async ({ params }) =>
-          await fetch(`http://localhost:5000/categories/${params.name}`),
+          await fetch(`http://localhost:5000/categories/${params.name}`, {
+            headers: {
+              authorization: `bearer ${localStorage.getItem("token")}`,
+            },
+          }),
       },
     ],
   },
@@ -75,15 +80,27 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard/admin/allbuyers",
-        element: <AllBuyers />,
+        element: (
+          <AdminRoute>
+            <AllBuyers />
+          </AdminRoute>
+        ),
       },
       {
         path: "/dashboard/admin/allsellers",
-        element: <AllSellers />,
+        element: (
+          <AdminRoute>
+            <AllSellers />
+          </AdminRoute>
+        ),
       },
       {
         path: "/dashboard/admin/repoteditems",
-        element: <RepotedItems />,
+        element: (
+          <AdminRoute>
+            <RepotedItems />
+          </AdminRoute>
+        ),
       },
     ],
   },
