@@ -7,6 +7,7 @@ import AllSellers from "../Pages/Dashboard/AdminDashboard/AllSellers";
 import RepotedItems from "../Pages/Dashboard/AdminDashboard/RepotedItems";
 import MyOrders from "../Pages/Dashboard/BuyerDashboard/MyOrders";
 import Dashboard from "../Pages/Dashboard/DashBoard/Dashboard";
+import Payment from "../Pages/Dashboard/Payment/Payment";
 import AddProduct from "../Pages/Dashboard/SellerDashBoard/AddProduct";
 import MyProducts from "../Pages/Dashboard/SellerDashBoard/MyProducts";
 import DisplayWatches from "../Pages/DisplayWatches/DisplayWatches";
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "/dashboard/buyer/payment",
+        element: <Payment />,
       },
       {
         path: "/dashboard/buyer/myorders",
