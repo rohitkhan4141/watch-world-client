@@ -1,108 +1,9 @@
-// import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-// import React, { useEffect, useState } from "react";
-// import Loading from "../../../components/Loading/Loading";
-
-// const CheckOutForm = () => {
-//   const [cardError, setCardError] = useState("");
-//   const [clientSecret, setClientSecret] = useState("");
-//   const [loading, setLoading] = useState(true);
-//   const price = 50;
-//   useEffect(() => {
-//     fetch("http://localhost:5000/create-payment-intent", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `bearer ${localStorage.getItem("token")}`,
-//       },
-//       body: JSON.stringify({ price: price }),
-//     })
-//       .then((res) => res.json())
-//       .then((data) => {
-//         console.log(data);
-//         setClientSecret(data.clientSecret);
-//         setLoading(false);
-//       });
-//   }, [price]);
-
-//   const stripe = useStripe();
-//   const elements = useElements();
-
-//   const handleSubmit = async (event) => {
-//     event.preventDefault();
-//     console.log("ekane ashtese");
-//     if (!stripe || !elements) {
-//       return;
-//     }
-//     const card = elements.getElement(CardElement);
-
-//     if (card == null) {
-//       return;
-//     }
-//     const { error, paymentMethod } = await stripe.createPaymentMethod({
-//       type: "card",
-//       card,
-//     });
-
-//     if (error) {
-//       console.log("[error]", error);
-//       setCardError(error.message);
-//     } else {
-//       console.log("[PaymentMethod]", paymentMethod);
-//       setCardError("");
-//     }
-
-//     const { paymentIntent, error: confirmError } =
-//       await stripe.confirmCardSetup(clientSecret, {
-//         payment_method: {
-//           card: card,
-//           billing_details: {
-//             name: "Jenny Rosen",
-//           },
-//         },
-//       });
-
-//     if (confirmError) {
-//       setCardError(confirmError.message);
-//       console.log(confirmError.message);
-//       return;
-//     }
-//     console.log(paymentIntent);
-//   };
-
-//   if (loading) {
-//     return <Loading />;
-//   }
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <CardElement
-//         options={{
-//           style: {
-//             base: {
-//               fontSize: "16px",
-//               color: "#424770",
-//               "::placeholder": {
-//                 color: "#aab7c4",
-//               },
-//             },
-//             invalid: {
-//               color: "#9e2146",
-//             },
-//           },
-//         }}
-//       />
-//       <button type='submit' disabled={!stripe || clientSecret}>
-//         Pay
-//       </button>
-//     </form>
-//   );
-// };
-
-// export default CheckOutForm;
-
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../../Contexts/AuthContext/AuthContext";
 
-const CheckoutForm = ({ appointment }) => {
+const CheckoutForm = ({ watch }) => {
+  const { user } = useContext(AuthContext);
   const stripe = useStripe();
   const elements = useElements();
   const [cardError, setCardError] = useState("");
@@ -111,18 +12,16 @@ const CheckoutForm = ({ appointment }) => {
   const [transactionId, setTransactionId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
 
-  // const { _id, price, patient, patientName } = appointment;
-
-  const price = 50;
+  const { resalePrice, name, _id, myBookingWatchId } = watch;
 
   useEffect(() => {
     fetch("http://localhost:5000/create-payment-intent", {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify({ price }),
+      body: JSON.stringify({ resalePrice }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -130,7 +29,7 @@ const CheckoutForm = ({ appointment }) => {
           setClientSecret(data.clientSecret);
         }
       });
-  }, [price]);
+  }, [resalePrice]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -159,47 +58,43 @@ const CheckoutForm = ({ appointment }) => {
         payment_method: {
           card: card,
           billing_details: {
-            name: "rohit",
+            name: name,
+            email: user?.email,
           },
         },
       });
-
     if (intentError) {
-      console(intentError?.message);
-      return;
+      setCardError(intentError?.message);
+      setProcessing(false);
+    } else {
+      setCardError("");
+      if (paymentIntent.status === "succeeded") {
+        setSuccess("Congrats! Your payment is completed.");
+      } else {
+        return;
+      }
+
+      setTransactionId(paymentIntent.id);
+
+      //store payment on database
+      const payment = {
+        myBookingWatchId: myBookingWatchId,
+        transactionId: paymentIntent.id,
+      };
+
+      fetch(`http://localhost:5000/products/${_id}`, {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(payment),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setProcessing(false);
+        });
     }
-
-    console.log(paymentIntent);
-
-    // if (intentError) {
-    //     setCardError(intentError?.message);
-    //     setProcessing(false);
-    // }
-    // else {
-    //     setCardError('');
-    //     setTransactionId(paymentIntent.id);
-    //     console.log(paymentIntent);
-    //     setSuccess('Congrats! Your payment is completed.')
-
-    //     //store payment on database
-    //     const payment = {
-    //         appointment: _id,
-    //         transactionId: paymentIntent.id
-    //     }
-    //     fetch(`https://secret-dusk-46242.herokuapp.com/booking/${_id}`, {
-    //         method: 'PATCH',
-    //         headers: {
-    //             'content-type': 'application/json',
-    //             'authorization': `Bearer ${localStorage.getItem('accessToken')}`
-    //         },
-    //         body: JSON.stringify(payment)
-    //     }).then(res=>res.json())
-    //     .then(data => {
-    //         setProcessing(false);
-    //         console.log(data);
-    //     })
-
-    // }
   };
   return (
     <>
@@ -209,9 +104,9 @@ const CheckoutForm = ({ appointment }) => {
             style: {
               base: {
                 fontSize: "16px",
-                color: "#424770",
+                color: "white",
                 "::placeholder": {
-                  color: "#aab7c4",
+                  color: "white",
                 },
               },
               invalid: {
@@ -221,22 +116,23 @@ const CheckoutForm = ({ appointment }) => {
           }}
         />
         <button
-          className='btn btn-success btn-sm mt-4'
+          className='btn btn-success btn-sm mt-7'
           type='submit'
           disabled={!stripe || !clientSecret || success}
         >
           Pay
         </button>
       </form>
-      {/* {
-                cardError && <p className='text-red-500'>{cardError}</p>
-            }
-            {
-                success && <div className='text-green-500'>
-                    <p>{success}  </p>
-                    <p>Your transaction Id: <span className="text-orange-500 font-bold">{transactionId}</span> </p>
-                </div>
-            } */}
+      {cardError && <p className='text-red-500'>{cardError}</p>}
+      {success && (
+        <div className='text-green-500'>
+          <p>{success} </p>
+          <p>
+            Your transaction Id:{" "}
+            <span className='text-blue-500 font-bold'>{transactionId}</span>{" "}
+          </p>
+        </div>
+      )}
     </>
   );
 };

@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import Loading from "../../../components/Loading/Loading";
 import { AuthContext } from "../../../Contexts/AuthContext/AuthContext";
 
 const MyOrders = () => {
   const { user } = useContext(AuthContext);
-  const { data: orders = [] } = useQuery({
+  const { data: orders = [], isLoading } = useQuery({
     queryKey: ["myOrders"],
     queryFn: async () => {
       const res = await fetch(
@@ -19,6 +21,10 @@ const MyOrders = () => {
       return data;
     },
   });
+
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
   return (
     <div className='overflow-x-auto w-full'>
       <table className='table w-full'>
@@ -27,7 +33,7 @@ const MyOrders = () => {
             <th>Image</th>
             <th>Watch Name</th>
             <th>Price</th>
-            <th></th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -49,7 +55,16 @@ const MyOrders = () => {
               <td>{order?.watchName}</td>
               <td>{`$ ${order?.price}`}</td>
               <th>
-                <button className='btn btn-primary btn-xs'>pay</button>
+                {orders[0]?.transactionId != "" ? (
+                  <span>Paid</span>
+                ) : (
+                  <Link
+                    to={`/dashboard/buyer/payment/${order._id}`}
+                    className='btn btn-primary btn-xs'
+                  >
+                    pay
+                  </Link>
+                )}
               </th>
             </tr>
           ))}
