@@ -26,6 +26,8 @@ const Payment = () => {
       });
   }, []);
 
+  console.log(watch);
+
   if (loding) {
     return <Loading></Loading>;
   }

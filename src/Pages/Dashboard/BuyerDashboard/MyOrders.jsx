@@ -21,7 +21,6 @@ const MyOrders = () => {
       return data;
     },
   });
-
   if (isLoading) {
     return <Loading></Loading>;
   }
@@ -55,7 +54,7 @@ const MyOrders = () => {
               <td>{order?.watchName}</td>
               <td>{`$ ${order?.price}`}</td>
               <th>
-                {orders[0]?.transactionId != "" ? (
+                {order?.transactionId ? (
                   <span>Paid</span>
                 ) : (
                   <Link

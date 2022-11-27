@@ -1,7 +1,28 @@
-import React from "react";
+import { format } from "date-fns";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import Loading from "../../../components/Loading/Loading";
+import { AuthContext } from "../../../Contexts/AuthContext/AuthContext";
 
 const AddProduct = () => {
+  const [sellerDetails, setSellerDetails] = useState([]);
+  const [loading, setLoding] = useState(true);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  useEffect(() => {
+    fetch(`http://localhost:5000/users/sellers/${user?.email}`, {
+      headers: {
+        authorization: `bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSellerDetails(data);
+        setLoding(false);
+      });
+  }, [user]);
+
   const submitProduct = (event) => {
     event.preventDefault();
     const form = event.target;
@@ -15,7 +36,7 @@ const AddProduct = () => {
     const location = form.location.value;
     const categorieName = form.categorieName.value;
     const description = form.description.value;
-
+    const date = format(new Date(), "PP");
     const productDetails = {
       name,
       condition,
@@ -27,12 +48,17 @@ const AddProduct = () => {
       categorieName,
       description,
       used,
+      sellersName: sellerDetails?.name,
+      sellerEmail: sellerDetails?.email,
+      isSellerVerified: sellerDetails?.isSellerVerified,
+      timeOfPost: date,
     };
 
     fetch("http://localhost:5000/products", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify(productDetails),
     })
@@ -40,9 +66,13 @@ const AddProduct = () => {
       .then((data) => {
         if (data.acknowledged) {
           toast.success("product added successfully");
+          navigate("/dashboard/seller/myproduct");
         }
       });
   };
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <div className='lg:w-2/3 mx-auto'>
       <h2 className='text-3xl text-center mt-10 mb-5'>Add Product</h2>

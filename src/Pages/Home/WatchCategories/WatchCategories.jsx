@@ -18,7 +18,7 @@ const WatchCategories = () => {
       });
   }, []);
   return (
-    <div>
+    <div className='pb-20'>
       <h2 className='text-4xl text-center font-semibold my-16'>
         Watch's Categories
       </h2>

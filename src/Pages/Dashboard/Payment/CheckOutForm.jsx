@@ -82,7 +82,7 @@ const CheckoutForm = ({ watch }) => {
         transactionId: paymentIntent.id,
       };
 
-      fetch(`http://localhost:5000/products/${_id}`, {
+      fetch(`http://localhost:5000/product/${_id}`, {
         method: "PUT",
         headers: {
           "content-type": "application/json",
@@ -93,9 +93,20 @@ const CheckoutForm = ({ watch }) => {
         .then((res) => res.json())
         .then((data) => {
           setProcessing(false);
+          deleteAdvertiseProduct(_id);
         });
     }
   };
+
+  const deleteAdvertiseProduct = (id) => {
+    fetch(`http://localhost:5000/advertisedproduct/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
