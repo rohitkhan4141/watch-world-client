@@ -84,6 +84,8 @@ const MyProducts = () => {
       })
       .catch((err) => console.log(err));
   };
+
+  console.log(products);
   if (isLoading) {
     return <Loading></Loading>;
   }
@@ -118,15 +120,15 @@ const MyProducts = () => {
               <td>{product?.name}</td>
               <td>{`$ ${product?.resalePrice}`}</td>
               <th>
-                {products[0]?.transactionId != "" ? (
-                  <span>Available</span>
-                ) : (
+                {product?.transactionId ? (
                   <span>Sold</span>
+                ) : (
+                  <span>Available</span>
                 )}
               </th>
               <td>
                 <button
-                  disabled={product?.advertise}
+                  disabled={product?.advertise || product?.transactionId}
                   onClick={() => advertiseHandler(product)}
                   className='btn btn-primary btn-sm mx-2'
                 >

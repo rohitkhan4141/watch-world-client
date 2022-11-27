@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import AdvertiseWatches from "../AdvertiseWatches/AdvertiseWatches";
+import Banner from "../Banner/Banner";
+import ContactUs from "../ContactUs/ContactUs";
 import WatchCategories from "../WatchCategories/WatchCategories";
 
 const Home = () => {
@@ -14,8 +16,10 @@ const Home = () => {
   });
   return (
     <div>
+      <Banner />
       <WatchCategories />
       {advertises.length > 0 && <AdvertiseWatches advertises={advertises} />}
+      <ContactUs />
     </div>
   );
 };
