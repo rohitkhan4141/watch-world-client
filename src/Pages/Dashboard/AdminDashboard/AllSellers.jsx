@@ -13,11 +13,14 @@ const AllSellers = () => {
   } = useQuery({
     queryKey: ["allsellers"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/allsellers", {
-        headers: {
-          authorization: `bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await fetch(
+        "https://watch-world-server.vercel.app/allsellers",
+        {
+          headers: {
+            authorization: `bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       const data = await res.json();
       return data;
     },
@@ -28,7 +31,7 @@ const AllSellers = () => {
   };
 
   const deleteHandler = (seller) => {
-    fetch(`http://localhost:5000/users/${seller._id}`, {
+    fetch(`https://watch-world-server.vercel.app/users/${seller._id}`, {
       method: "DELETE",
       headers: {
         authorization: `bearer ${localStorage.getItem("token")}`,
@@ -45,7 +48,7 @@ const AllSellers = () => {
   };
 
   const verifyHandler = (user) => {
-    fetch(`http://localhost:5000/users/${user._id}`, {
+    fetch(`https://watch-world-server.vercel.app/users/${user._id}`, {
       method: "PUT",
       headers: {
         authorization: `bearer ${localStorage.getItem("token")}`,
@@ -67,6 +70,7 @@ const AllSellers = () => {
   }
   return (
     <div className='overflow-x-auto'>
+      <h2 className='text-4xl font-bold my-10'>All Sellers</h2>
       <table className='table w-full'>
         <thead>
           <tr>

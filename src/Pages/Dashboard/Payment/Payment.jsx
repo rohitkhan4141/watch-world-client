@@ -14,7 +14,7 @@ const Payment = () => {
   const [loding, setLoading] = useState(true);
   const { id } = useParams();
   useEffect(() => {
-    fetch(`http://localhost:5000/watches/${id}`, {
+    fetch(`https://watch-world-server.vercel.app/watches/${id}`, {
       headers: {
         authorization: `bearer ${localStorage.getItem("token")}`,
       },

@@ -10,7 +10,7 @@ const DashBoardLayout = () => {
   const [isAdmin] = useAdmin(user?.email);
   const [isSeller] = useSeller(user?.email);
   return (
-    <div>
+    <div className='max-w-[1400px] mx-auto'>
       <Navbar />
       <div className='drawer drawer-mobile'>
         <input

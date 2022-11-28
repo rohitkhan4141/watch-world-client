@@ -11,11 +11,14 @@ const AddProduct = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   useEffect(() => {
-    fetch(`http://localhost:5000/users/sellers/${user?.email}`, {
-      headers: {
-        authorization: `bearer ${localStorage.getItem("token")}`,
-      },
-    })
+    fetch(
+      `https://watch-world-server.vercel.app/users/sellers/${user?.email}`,
+      {
+        headers: {
+          authorization: `bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setSellerDetails(data);
@@ -54,7 +57,7 @@ const AddProduct = () => {
       timeOfPost: date,
     };
 
-    fetch("http://localhost:5000/products", {
+    fetch("https://watch-world-server.vercel.app/products", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -156,7 +159,7 @@ const AddProduct = () => {
         <input
           type='submit'
           value='submit'
-          className='input input-bordered input-accent w-full bg-accent text-white'
+          className='input input-bordered input-accent w-full bg-accent text-white cursor-pointer'
         />
       </form>
     </div>

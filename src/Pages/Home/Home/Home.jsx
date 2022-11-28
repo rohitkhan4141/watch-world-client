@@ -9,7 +9,9 @@ const Home = () => {
   const { data: advertises = [] } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/advertisedproduct");
+      const res = await fetch(
+        "https://watch-world-server.vercel.app/advertisedproduct"
+      );
       const data = await res.json();
       return data;
     },

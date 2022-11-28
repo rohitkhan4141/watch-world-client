@@ -13,7 +13,7 @@ const RepotedItems = () => {
   } = useQuery({
     queryKey: ["report"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/report", {
+      const res = await fetch("https://watch-world-server.vercel.app/report", {
         headers: {
           authorization: `bearer ${localStorage.getItem("token")}`,
         },
@@ -29,7 +29,7 @@ const RepotedItems = () => {
 
   const deleteHandler = (report) => {
     console.log(report);
-    fetch(`http://localhost:5000/report/${report._id}`, {
+    fetch(`https://watch-world-server.vercel.app/report/${report._id}`, {
       method: "DELETE",
       headers: {
         authorization: `bearer ${localStorage.getItem("token")}`,
@@ -51,6 +51,7 @@ const RepotedItems = () => {
   return (
     <div>
       <div className='overflow-x-auto'>
+        <h2 className='text-4xl font-bold my-10'>Reported Items</h2>
         <table className='table w-full'>
           <thead>
             <tr>

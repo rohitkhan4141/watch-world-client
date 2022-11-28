@@ -15,7 +15,7 @@ const CheckoutForm = ({ watch }) => {
   const { resalePrice, name, _id, myBookingWatchId } = watch;
 
   useEffect(() => {
-    fetch("http://localhost:5000/create-payment-intent", {
+    fetch("https://watch-world-server.vercel.app/create-payment-intent", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -82,7 +82,7 @@ const CheckoutForm = ({ watch }) => {
         transactionId: paymentIntent.id,
       };
 
-      fetch(`http://localhost:5000/product/${_id}`, {
+      fetch(`https://watch-world-server.vercel.app/product/${_id}`, {
         method: "PUT",
         headers: {
           "content-type": "application/json",
@@ -99,7 +99,7 @@ const CheckoutForm = ({ watch }) => {
   };
 
   const deleteAdvertiseProduct = (id) => {
-    fetch(`http://localhost:5000/advertisedproduct/${id}`, {
+    fetch(`https://watch-world-server.vercel.app/advertisedproduct/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

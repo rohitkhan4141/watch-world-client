@@ -8,7 +8,7 @@ const WatchCategories = () => {
   const [categoriesLoding, setCategoriesLoding] = useState(true);
   useEffect(() => {
     axios
-      .get("http://localhost:5000/categories")
+      .get("https://watch-world-server.vercel.app/categories")
       .then(function (response) {
         setCategories(response.data);
         setCategoriesLoding(false);

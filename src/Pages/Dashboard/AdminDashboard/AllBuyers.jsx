@@ -13,11 +13,14 @@ const AllBuyers = () => {
   } = useQuery({
     queryKey: ["allbuyers"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/allbuyers", {
-        headers: {
-          authorization: `bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await fetch(
+        "https://watch-world-server.vercel.app/allbuyers",
+        {
+          headers: {
+            authorization: `bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       const data = await res.json();
       return data;
     },
@@ -28,7 +31,7 @@ const AllBuyers = () => {
   };
 
   const deleteHandler = (buyer) => {
-    fetch(`http://localhost:5000/users/${buyer._id}`, {
+    fetch(`https://watch-world-server.vercel.app/users/${buyer._id}`, {
       method: "DELETE",
       headers: {
         authorization: `bearer ${localStorage.getItem("token")}`,
@@ -49,6 +52,7 @@ const AllBuyers = () => {
   }
   return (
     <div className='overflow-x-auto'>
+      <h2 className='text-4xl font-bold my-10'>All Buyers</h2>
       <table className='table w-full'>
         <thead>
           <tr>

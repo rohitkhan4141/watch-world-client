@@ -4,6 +4,12 @@
   object-fit: cover;
 }
 
+.c-img-2 img {
+  width: 260px;
+  height: 250px;
+  object-fit: cover;
+}
+
 .paragraph-tag p {
   padding: 2px 0;
 }

@@ -10,7 +10,7 @@ const MyOrders = () => {
     queryKey: ["myOrders"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/mybookings?email=${user.email}`,
+        `https://watch-world-server.vercel.app/mybookings?email=${user.email}`,
         {
           headers: {
             authorization: `bearer ${localStorage.getItem("token")}`,
@@ -25,7 +25,8 @@ const MyOrders = () => {
     return <Loading></Loading>;
   }
   return (
-    <div className='overflow-x-auto w-full'>
+    <div className='overflow-x-auto w-full mb-20'>
+      <h2 className='text-4xl font-bold my-10'>My Orders</h2>
       <table className='table w-full'>
         <thead>
           <tr>

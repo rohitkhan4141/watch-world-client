@@ -26,7 +26,7 @@ const BookingModal = ({ bookingWatches, setBookingWatches }) => {
       watchId,
     };
 
-    fetch("http://localhost:5000/mybookings", {
+    fetch("https://watch-world-server.vercel.app/mybookings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

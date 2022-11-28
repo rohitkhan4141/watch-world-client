@@ -38,7 +38,7 @@ const Register = () => {
       email,
       role,
     };
-    fetch("http://localhost:5000/users", {
+    fetch("https://watch-world-server.vercel.app/users", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +70,7 @@ const Register = () => {
   };
 
   const getUserToken = (email) => {
-    fetch(`http://localhost:5000/jwt?email=${email}`)
+    fetch(`https://watch-world-server.vercel.app/jwt?email=${email}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.accessToken) {
@@ -81,7 +81,7 @@ const Register = () => {
   };
 
   return (
-    <>
+    <div className='px-3'>
       <h1 className='text-4xl text-center font-bold mt-16 mb-8'>Register</h1>
       <div className='flex justify-center items-center'>
         <form
@@ -147,7 +147,7 @@ const Register = () => {
               <span className='label-text'>Select Role</span>
             </label>
             <select
-              className='select select-accent'
+              className='select select-accent mb-2'
               {...register("role", { required: true })}
             >
               <option defaultValue='buyer' value='buyer'>
@@ -159,15 +159,12 @@ const Register = () => {
               <span className='text-red-400 my-2'>{errors.role?.message}</span>
             )}
           </div>
-          <span className='text-rose-400 '>
-            Have an account?
-            <Link
-              className='mx-3 label-text-alt link link-hover text-rose-400 text-lg'
-              to='/Login'
-            >
-              Login
-            </Link>
-          </span>
+          <Link
+            className='label-text-alt link link-hover text-rose-400 text-base'
+            to='/Login'
+          >
+            Have an account? Login
+          </Link>
           <input
             type='submit'
             value='Register'
@@ -187,7 +184,7 @@ const Register = () => {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

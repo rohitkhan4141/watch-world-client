@@ -40,11 +40,14 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: async ({ params }) =>
-          await fetch(`http://localhost:5000/categories/${params.name}`, {
-            headers: {
-              authorization: `bearer ${localStorage.getItem("token")}`,
-            },
-          }),
+          await fetch(
+            `https://watch-world-server.vercel.app/categories/${params.name}`,
+            {
+              headers: {
+                authorization: `bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          ),
       },
       {
         path: "*",

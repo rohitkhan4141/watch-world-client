@@ -16,7 +16,7 @@ const MyProducts = () => {
     queryKey: ["products", user?.email],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/products?email=${user?.email}`,
+        `https://watch-world-server.vercel.app/products?email=${user?.email}`,
         {
           headers: {
             authorization: `bearer ${localStorage.getItem("token")}`,
@@ -32,7 +32,7 @@ const MyProducts = () => {
   };
 
   const deleteHandler = (product) => {
-    fetch(`http://localhost:5000/products/${product._id}`, {
+    fetch(`https://watch-world-server.vercel.app/products/${product._id}`, {
       method: "DELETE",
       headers: {
         authorization: `bearer ${localStorage.getItem("token")}`,
@@ -49,7 +49,7 @@ const MyProducts = () => {
   };
 
   const advertiseHandler = (product) => {
-    fetch(`http://localhost:5000/products/${product._id}`, {
+    fetch(`https://watch-world-server.vercel.app/products/${product._id}`, {
       method: "PUT",
       headers: {
         authorization: `bearer ${localStorage.getItem("token")}`,
@@ -66,7 +66,7 @@ const MyProducts = () => {
 
   const advertiseProducts = (product) => {
     console.log(product);
-    fetch(`http://localhost:5000/products/advertise`, {
+    fetch(`https://watch-world-server.vercel.app/products/advertise`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,7 +90,8 @@ const MyProducts = () => {
     return <Loading></Loading>;
   }
   return (
-    <div className='overflow-x-auto w-full'>
+    <div className='overflow-x-auto w-full p-x-5'>
+      <h2 className='text-4xl font-bold my-10'>My Products</h2>
       <table className='table w-full'>
         <thead>
           <tr>

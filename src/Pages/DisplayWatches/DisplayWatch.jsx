@@ -6,7 +6,7 @@ import "./DisplayWatch.css";
 
 const DisplayWatch = ({ watch, setBookingWatches }) => {
   const reportProductHandler = (product) => {
-    fetch("http://localhost:5000/report", {
+    fetch("https://watch-world-server.vercel.app/report", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
