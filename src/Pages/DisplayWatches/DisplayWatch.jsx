@@ -1,8 +1,10 @@
 import React from "react";
+import { GoReport } from "react-icons/go";
 import { TiTick } from "react-icons/ti";
 import "./DisplayWatch.css";
 
 const DisplayWatch = ({ watch, setBookingWatches }) => {
+  const reportProductHandler = (product) => {};
   return (
     <div className='card card-side bg-base-300 shadow-xl flex flex-col md:flex-row'>
       <figure className='c-img'>
@@ -23,11 +25,16 @@ const DisplayWatch = ({ watch, setBookingWatches }) => {
             </span>
           </div>
         </div>
-        <div className='card-actions justify-end'>
+        <div className='card-actions justify-end items-center'>
+          <div className='tooltip' data-tip='Report Product'>
+            <button onClick={() => reportProductHandler(watch)}>
+              <GoReport className='text-2xl' />
+            </button>
+          </div>
           <label
             onClick={() => setBookingWatches(watch)}
             htmlFor='booking-modal'
-            className='btn btn-primary text-white'
+            className='btn btn-accent text-white'
           >
             Book
           </label>
