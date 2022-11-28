@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import Four04 from "../components/404/Four04";
 import DashBoardLayout from "../Layout/DashBoardLayout";
 import Main from "../Layout/Main";
 import Blog from "../Pages/Blog/Blog";
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
               authorization: `bearer ${localStorage.getItem("token")}`,
             },
           }),
+      },
+      {
+        path: "*",
+        element: <Four04 />,
       },
     ],
   },
@@ -111,6 +116,10 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      {
+        path: "*",
+        element: <Four04 />,
+      },
     ],
   },
   {
@@ -120,6 +129,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "*",
+    element: <Four04 />,
   },
 ]);
 

@@ -1,10 +1,29 @@
 import React from "react";
+import toast from "react-hot-toast";
 import { GoReport } from "react-icons/go";
 import { TiTick } from "react-icons/ti";
 import "./DisplayWatch.css";
 
 const DisplayWatch = ({ watch, setBookingWatches }) => {
-  const reportProductHandler = (product) => {};
+  const reportProductHandler = (product) => {
+    fetch("http://localhost:5000/report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(product),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.acknowledged) {
+          toast.success("Successfully Reported Item");
+        } else {
+          toast.error("Already Reported");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div className='card card-side bg-base-300 shadow-xl flex flex-col md:flex-row'>
       <figure className='c-img'>

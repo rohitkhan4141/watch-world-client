@@ -5,7 +5,7 @@ import Loading from "../../../components/Loading/Loading";
 import DeleteModal from "../DeleteModal/DeleteModal";
 
 const AllBuyers = () => {
-  const [deleteBuyer, setDeleteBuyer] = useState(null);
+  const [deleteItem, setDeleteItem] = useState(null);
   const {
     data: buyers = [],
     isLoading,
@@ -24,7 +24,7 @@ const AllBuyers = () => {
   });
 
   const cancleDelete = () => {
-    setDeleteBuyer(null);
+    setDeleteItem(null);
   };
 
   const deleteHandler = (buyer) => {
@@ -66,7 +66,7 @@ const AllBuyers = () => {
               <td>{user?.email}</td>
               <td>
                 <label
-                  onClick={() => setDeleteBuyer(user)}
+                  onClick={() => setDeleteItem(user)}
                   htmlFor='delete-modal'
                   className='btn btn-accent btn-sm'
                 >
@@ -77,9 +77,9 @@ const AllBuyers = () => {
           ))}
         </tbody>
       </table>
-      {deleteBuyer && (
+      {deleteItem && (
         <DeleteModal
-          deleteUser={deleteBuyer}
+          deleteItem={deleteItem}
           cancleDelete={cancleDelete}
           deleteHandler={deleteHandler}
         />

@@ -5,9 +5,7 @@ import Loading from "../../../components/Loading/Loading";
 import DeleteModal from "../DeleteModal/DeleteModal";
 
 const AllSellers = () => {
-  const [deleteSeller, setDeleteSeller] = useState(null);
-  const [isVerified, setIsVerified] = useState(false);
-
+  const [deleteItem, setDeleteItem] = useState(null);
   const {
     data: sellers = [],
     isLoading,
@@ -26,7 +24,7 @@ const AllSellers = () => {
   });
 
   const cancleDelete = () => {
-    setDeleteSeller(null);
+    setDeleteItem(null);
   };
 
   const deleteHandler = (seller) => {
@@ -86,14 +84,14 @@ const AllSellers = () => {
               <td>{user?.email}</td>
               <td>
                 <button
-                  disabled={isVerified}
+                  disabled={user?.isSellerVerified ? true : false}
                   onClick={() => verifyHandler(user)}
                   className='btn btn-primary btn-sm mx-2'
                 >
                   Varify
                 </button>
                 <label
-                  onClick={() => setDeleteSeller(user)}
+                  onClick={() => setDeleteItem(user)}
                   htmlFor='delete-modal'
                   className='btn btn-accent btn-sm'
                 >
@@ -104,9 +102,9 @@ const AllSellers = () => {
           ))}
         </tbody>
       </table>
-      {deleteSeller && (
+      {deleteItem && (
         <DeleteModal
-          deleteUser={deleteSeller}
+          deleteItem={deleteItem}
           cancleDelete={cancleDelete}
           deleteHandler={deleteHandler}
         />

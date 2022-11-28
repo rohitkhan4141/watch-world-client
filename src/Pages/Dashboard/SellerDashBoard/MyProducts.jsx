@@ -6,7 +6,7 @@ import { AuthContext } from "../../../Contexts/AuthContext/AuthContext";
 import DeleteModal from "../DeleteModal/DeleteModal";
 
 const MyProducts = () => {
-  const [deleteBuyer, setDeleteBuyer] = useState(null);
+  const [deleteItem, setDeleteItem] = useState(null);
   const { user } = useContext(AuthContext);
   const {
     data: products = [],
@@ -28,7 +28,7 @@ const MyProducts = () => {
     },
   });
   const cancleDelete = () => {
-    setDeleteBuyer(null);
+    setDeleteItem(null);
   };
 
   const deleteHandler = (product) => {
@@ -135,7 +135,7 @@ const MyProducts = () => {
                   Advertise
                 </button>
                 <label
-                  onClick={() => setDeleteBuyer(product)}
+                  onClick={() => setDeleteItem(product)}
                   htmlFor='delete-modal'
                   className='btn btn-accent btn-sm'
                 >
@@ -146,9 +146,9 @@ const MyProducts = () => {
           ))}
         </tbody>
       </table>
-      {deleteBuyer && (
+      {deleteItem && (
         <DeleteModal
-          deleteUser={deleteBuyer}
+          deleteItem={deleteItem}
           cancleDelete={cancleDelete}
           deleteHandler={deleteHandler}
         />

@@ -1,9 +1,8 @@
 import React from "react";
 
 const AdvertiseWatches = ({ advertises }) => {
-  console.log(advertises);
   return (
-    <div className='mb-24 w-2/3 mx-auto'>
+    <div className='mb-24'>
       <h2 className='text-4xl text-center font-semibold mb-14'>Advertise</h2>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-self-center self-center justify-items-center'>
         {advertises.map((advertise) => (

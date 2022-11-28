@@ -1,17 +1,17 @@
 import React from "react";
 
-const DeleteModal = ({ deleteUser, cancleDelete, deleteHandler }) => {
+const DeleteModal = ({ deleteItem, cancleDelete, deleteHandler }) => {
   return (
     <div>
       <input type='checkbox' id='delete-modal' className='modal-toggle' />
       <div className='modal'>
         <div className='modal-box'>
           <h3 className='font-bold text-lg'>
-            {`Want to Delete ${deleteUser?.name} ?`}
+            {`Want to Delete ${deleteItem?.name} ?`}
           </h3>
           <div className='modal-action'>
             <label
-              onClick={() => deleteHandler(deleteUser)}
+              onClick={() => deleteHandler(deleteItem)}
               htmlFor='delete-modal'
               className='btn btn-accent'
             >
