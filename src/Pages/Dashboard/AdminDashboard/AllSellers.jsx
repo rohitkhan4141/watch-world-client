@@ -48,17 +48,21 @@ const AllSellers = () => {
   };
 
   const verifyHandler = (user) => {
-    fetch(`https://watch-world-server.vercel.app/users/${user._id}`, {
-      method: "PUT",
-      headers: {
-        authorization: `bearer ${localStorage.getItem("token")}`,
-      },
-    })
+    fetch(
+      `https://watch-world-server-rohitkhan4141.vercel.app/users/${user._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(user),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.acknowledged) {
           toast.success("verified Successfully");
-          setIsVerified(true);
           refetch();
         }
       })
