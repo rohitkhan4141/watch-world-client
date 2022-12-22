@@ -18,7 +18,7 @@ const DeleteModal = ({ deleteItem, cancleDelete, deleteHandler }) => {
               Delete
             </label>
             <button onClick={cancleDelete} className='btn btn-primary'>
-              Cancle
+              Cancel
             </button>
           </div>
         </div>
